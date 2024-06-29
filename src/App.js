@@ -1,25 +1,89 @@
-import logo from './logo.svg';
-import './App.css';
+import { Component } from "react";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import "./App.css";
+
+import CardList from "./components/card-list/card-list.component";
+import SearchBox from "./components/search-box/search-box.component";
+import SearchKeyword from "./components/search-keyword/search-keyword.component";
+class App extends Component {
+  constructor() {
+    super();
+
+    this.state = { jokes: [], searchField: "", searchTerm: "" };
+  }
+
+  componentDidMount() {
+    // fetch("https://jsonplaceholder.typicode.com/users")
+    // fetch("https://icanhazdadjoke.com/search?term=cat", {
+    fetch("https://icanhazdadjoke.com/search?limit=30", {
+      headers: {
+        Accept: "application/json",
+      },
+    })
+      .then((res) => {
+        return res.json();
+      })
+      .then((data) => {
+        console.log("h2=", data);
+        this.setState(
+          () => {
+            return { jokes: data.results };
+          },
+          () => {
+            console.log(this.state);
+          }
+        );
+      });
+  }
+  //for filtering results
+  onSearchChange = (event) => {
+    const searchField = event.target.value.toLocaleLowerCase();
+    this.setState({ searchField });
+  };
+
+  //for searching keywords
+  handleInputChange = (event) => {
+    this.setState({ searchTerm: event.target.value });
+  };
+
+  handleSearch = () => {
+    const { searchTerm } = this.state;
+    fetch(`https://icanhazdadjoke.com/search?term=${searchTerm}`, {
+      headers: {
+        Accept: "application/json",
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        this.setState({ jokes: data.results });
+      })
+      .catch((error) => console.error("Error fetching jokes:", error));
+  };
+
+  render() {
+    const filteredJokes = this.state.jokes.filter((joke) => {
+      return joke.joke.toLocaleLowerCase().includes(this.state.searchField);
+    });
+    const { searchTerm, jokes } = this.state;
+    return (
+      <div className="App">
+        <h1 className="app-header">Who doesn't love dad jokes?</h1>
+        <SearchBox
+          onChangeHandler={this.onSearchChange}
+          className="search-box"
+          placeholder="search here"
+        />
+        <SearchKeyword
+          searchTerm={searchTerm}
+          jokes={jokes}
+          onInputChange={this.handleInputChange}
+          onSearch={this.handleSearch}
+        />
+
+        <CardList jokes={filteredJokes} />
+      </div>
+    );
+  }
 }
 
 export default App;
