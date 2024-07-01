@@ -1,20 +1,21 @@
-import { Component } from "react";
+import { useState, useEffect } from "react";
 
 import "./App.css";
 
 import CardList from "./components/card-list/card-list.component";
 import SearchBox from "./components/search-box/search-box.component";
 import SearchKeyword from "./components/search-keyword/search-keyword.component";
-class App extends Component {
-  constructor() {
-    super();
 
-    this.state = { jokes: [], searchField: "", searchTerm: "" };
-  }
+const App = () => {
+  const [searchField, setSearchField] = useState(""); //[value, setValue]
+  const [jokes, setJokes] = useState([]); //[value, setValue
+  const [filteredJokes, setFilteredJokes] = useState(jokes);
+  const [stringField, setStringField] = useState(""); //[value, setValue
 
-  componentDidMount() {
-    // fetch("https://jsonplaceholder.typicode.com/users")
-    // fetch("https://icanhazdadjoke.com/search?term=cat", {
+  console.log("render");
+
+  useEffect(() => {
+    console.log("effect fired- fetching api");
     fetch("https://icanhazdadjoke.com/search?limit=30", {
       headers: {
         Accept: "application/json",
@@ -23,67 +24,49 @@ class App extends Component {
       .then((res) => {
         return res.json();
       })
-      .then((data) => {
-        console.log("h2=", data);
-        this.setState(
-          () => {
-            return { jokes: data.results };
-          },
-          () => {
-            console.log(this.state);
-          }
-        );
+      .then((res) => {
+        return setJokes(res.results);
       });
-  }
-  //for filtering results
-  onSearchChange = (event) => {
-    const searchField = event.target.value.toLocaleLowerCase();
-    this.setState({ searchField });
-  };
+  }, []);
+  useEffect(() => {
+    console.log("effect filtered-jokes, searchField");
 
-  //for searching keywords
-  handleInputChange = (event) => {
-    this.setState({ searchTerm: event.target.value });
-  };
-
-  handleSearch = () => {
-    const { searchTerm } = this.state;
-    fetch(`https://icanhazdadjoke.com/search?term=${searchTerm}`, {
-      headers: {
-        Accept: "application/json",
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        this.setState({ jokes: data.results });
-      })
-      .catch((error) => console.error("Error fetching jokes:", error));
-  };
-
-  render() {
-    const filteredJokes = this.state.jokes.filter((joke) => {
-      return joke.joke.toLocaleLowerCase().includes(this.state.searchField);
+    const newFilteredJokes = jokes.filter((joke) => {
+      return joke.joke.toLocaleLowerCase().includes(searchField);
     });
-    const { searchTerm, jokes } = this.state;
-    return (
-      <div className="App">
-        <h1 className="app-header">Who doesn't love dad jokes?</h1>
-        <SearchBox
-          onChangeHandler={this.onSearchChange}
-          className="search-box"
-          placeholder="search here"
-        />
-        <SearchKeyword
-          searchTerm={searchTerm}
-          jokes={jokes}
-          onInputChange={this.handleInputChange}
-          onSearch={this.handleSearch}
-        />
+    setFilteredJokes(newFilteredJokes);
+  }, [jokes, searchField]);
 
-        <CardList jokes={filteredJokes} />
-      </div>
-    );
-  }
-}
+  const onSearchChange = (event) => {
+    console.log("onSearchChange called");
+    const searchFieldString = event.target.value.toLocaleLowerCase();
+    setSearchField(searchFieldString);
+    // this.setState({ searchField });
+  };
+
+  const onStringChange = (event) => {
+    console.log("onStringChange called");
+    setStringField(event.target.value);
+  };
+  // console.log(filteredJokes);
+  return (
+    <div className="App">
+      <h1 className="app-header">Who doesn't love dad jokes?</h1>
+      <SearchBox
+        onChangeHandler={onSearchChange}
+        className="search-box"
+        placeholder="search here"
+      />
+      <SearchBox onChangeHandler={onStringChange} placeholder="search here2" />
+      {/* <SearchKeyword
+        searchTerm={searchTerm}
+        jokes={jokes}
+        onInputChange={this.handleInputChange}
+        onSearch={this.handleSearch}
+      /> */}
+      <CardList jokes={filteredJokes} />
+    </div>
+  );
+};
 
 export default App;
