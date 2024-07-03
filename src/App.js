@@ -12,10 +12,7 @@ const App = () => {
   const [filteredJokes, setFilteredJokes] = useState(jokes);
   const [stringField, setStringField] = useState(""); //[value, setValue
 
-  console.log("render");
-
   useEffect(() => {
-    console.log("effect fired- fetching api");
     fetch("https://icanhazdadjoke.com/search?limit=30", {
       headers: {
         Accept: "application/json",
@@ -29,8 +26,6 @@ const App = () => {
       });
   }, []);
   useEffect(() => {
-    console.log("effect filtered-jokes, searchField");
-
     const newFilteredJokes = jokes.filter((joke) => {
       return joke.joke.toLocaleLowerCase().includes(searchField);
     });
@@ -38,17 +33,14 @@ const App = () => {
   }, [jokes, searchField]);
 
   const onSearchChange = (event) => {
-    console.log("onSearchChange called");
     const searchFieldString = event.target.value.toLocaleLowerCase();
     setSearchField(searchFieldString);
     // this.setState({ searchField });
   };
 
   const onStringChange = (event) => {
-    console.log("onStringChange called");
     setStringField(event.target.value);
   };
-  // console.log(filteredJokes);
   return (
     <div className="App">
       <h1 className="app-header">Who doesn't love dad jokes?</h1>
