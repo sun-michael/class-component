@@ -1,10 +1,22 @@
-const Card = (props) => {
-    const {joke} = props;
-    return(
-        <div key={joke.id} className='card-container'>
-        <p key={joke.id}>{joke.joke}</p>
-        </div>
-    )
+import { Component} from 'react';
+
+class Card extends Component {
+    render() {
+        const {joke} = this.props;
+        return(
+
+            // <div key={joke.id} className='card-container'>
+            // <p key={joke.id}>{joke.joke}</p>
+            // </div>
+
+            <tbody>
+                <tr>
+                    <th scope="row">{joke.id}</th>
+                    <td>{joke.joke}</td>
+                </tr>
+            </tbody>
+        )
+    }
 }
 
 export default Card;
