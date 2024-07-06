@@ -9,7 +9,7 @@ class App extends Component {
   constructor() {
     super();
 
-    this.state = { jokes: [], searchField: "", searchTerm: "" };
+    this.state = { jokes: [], total: "", searchField: "", searchTerm: "" };
   }
 
   componentDidMount() {
@@ -27,7 +27,7 @@ class App extends Component {
         console.log("h2=", data);
         this.setState(
           () => {
-            return { jokes: data.results };
+            return { jokes: data.results, total: data.total_jokes };
           },
           () => {
             console.log(this.state);
@@ -64,19 +64,19 @@ class App extends Component {
     const filteredJokes = this.state.jokes.filter((joke) => {
       return joke.joke.toLocaleLowerCase().includes(this.state.searchField);
     });
-    const { searchTerm, jokes } = this.state;
+    const { searchTerm, jokes, total } = this.state;
     console.log("search=", jokes);
     return (
       <div className="App">
         <div className="container">
-          <h1 className="app-header">Who doesn't love dad jokes?</h1>
+          <h1 className="app-header m-3">Who doesn't love dad jokes?</h1>
           <p>We found {jokes.length} dad jokes :)</p>
-          <p>current search term: {searchTerm}</p>
           <SearchBox
             onChangeHandler={this.onSearchChange}
             className="search-box"
-            placeholder="Filter the results"
+            placeholder="Filter from results"
           />
+          <p>current search term: {searchTerm}</p>
           <SearchKeyword
             searchTerm={searchTerm}
             jokes={jokes}

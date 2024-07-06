@@ -6,6 +6,8 @@ class CardList extends Component {
         // console.log("h3=",this.props)
         // const {jokes} = this.props;
         return (
+            <div className='bg-success p-2 text-dark bg-opacity-25'>
+
             <table className="table table-hover">
                 <thead>
                     <tr>
@@ -22,6 +24,8 @@ class CardList extends Component {
                     )}
                 {/* </div> */}
             </table>
+            </div>
+
         )
     }
 }
