@@ -12,7 +12,7 @@ class Card extends Component {
             <tbody>
                 <tr>
                     <th scope="row">{joke.id}</th>
-                    <td>{joke.joke}</td>
+                    <td class="text-start">{joke.joke}</td>
                 </tr>
             </tbody>
         )

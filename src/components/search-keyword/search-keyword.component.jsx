@@ -5,7 +5,7 @@ class SearchKeyword extends Component {
     const { searchTerm, onInputChange, onSearch } = this.props;
 
     return (
-      <div>
+      <div class="input-group mb-3">
         {/* <input
           type="text"
           value={searchTerm}
@@ -20,7 +20,7 @@ class SearchKeyword extends Component {
           ))}
         </ul> */}
 
-          <div class="form-floating mb-3">
+          <div class="form-floating">
             <input type="search" className={`form-control ${this.props.className}`} id="floatingInput" 
               value={searchTerm} onChange={onInputChange} placeholder={this.props.placeholder}/>
             <label for="floatingInput">{this.props.placeholder}</label>
