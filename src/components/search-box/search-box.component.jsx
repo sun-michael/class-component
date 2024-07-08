@@ -11,7 +11,8 @@ class SearchBox extends Component {
         //   onChange={this.props.onChangeHandler}
         // />
           <div class="form-floating mb-3">
-            <input type="search" className={`form-control {this.props.className}`} id="floatingInput" onChange={this.props.onChangeHandler} placeholder={this.props.placeholder}/>
+            <input type="search" className={`form-control {this.props.className}`} 
+              id="floatingInput" onChange={this.props.onChangeHandler} placeholder={this.props.placeholder}/>
             <label for="floatingInput">{this.props.placeholder}</label>
           </div>
         )
